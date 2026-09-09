@@ -1,0 +1,53 @@
+@model IEnumerable<BancoDeDadosKasaleveSistema.Models.AluminioCor>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CorAluminioCor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Codigo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SKUAluminioCor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HexCor)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.CorAluminioCor)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Codigo)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.SKUAluminioCor)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.HexCor)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.AluminioCorId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.AluminioCorId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.AluminioCorId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

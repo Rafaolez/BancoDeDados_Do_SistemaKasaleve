@@ -1,0 +1,48 @@
+@model BancoDeDadosKasaleveSistema.Models.CordaCor
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>CordaCor</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Nome" class="control-label"></label>
+                <input asp-for="Nome" class="form-control" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Sku" class="control-label"></label>
+                <input asp-for="Sku" class="form-control" />
+                <span asp-validation-for="Sku" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="HexCor" class="control-label"></label>
+                <input asp-for="HexCor" class="form-control" />
+                <span asp-validation-for="HexCor" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Variacoes" class="control-label"></label>
+                <input asp-for="Variacoes" class="form-control" />
+                <span asp-validation-for="Variacoes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

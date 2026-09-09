@@ -1,0 +1,119 @@
+@model IEnumerable<BancoDeDadosKasaleveSistema.Models.Orcamento>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DataCriacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Validade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClienteId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cliente)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UsuarioId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Usuario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubTotal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Desconto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Frete)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Total)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Obs)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataAlteracao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Itens)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Checklists)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.DataCriacao)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Validade)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.ClienteId)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Cliente)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.UsuarioId)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Usuario)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.SubTotal)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Desconto)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Frete)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Total)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Obs)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.DataAlteracao)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Itens)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Checklists)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.OrcamentoId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.OrcamentoId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.OrcamentoId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

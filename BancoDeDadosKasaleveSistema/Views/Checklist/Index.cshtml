@@ -1,0 +1,137 @@
+@model IEnumerable<BancoDeDadosKasaleveSistema.Models.Checklist>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Orcamento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ChecklistEnderecoEntrega)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Bairro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cidade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cep)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConferirProduto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cores)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MesaComFuro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Alteracao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Imprimir)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nota)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prazo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Frete)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrevisaoEntrega)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UsuarioId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Usuario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataConclusao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.Orcamento)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.ChecklistEnderecoEntrega)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Bairro)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Cidade)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Cep)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.ConferirProduto)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Cores)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.MesaComFuro)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Alteracao)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Imprimir)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Nota)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Prazo)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Frete)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.PrevisaoEntrega)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.UsuarioId)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Usuario)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.DataConclusao)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Status)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ChecklistId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ChecklistId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ChecklistId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

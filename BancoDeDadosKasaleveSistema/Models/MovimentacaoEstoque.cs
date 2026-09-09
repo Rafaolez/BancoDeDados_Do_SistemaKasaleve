@@ -24,6 +24,27 @@ namespace BancoDeDadosKasaleveSistema.Models
         [Range(1, int.MaxValue, ErrorMessage = "A quantidade deve ser maior que zero.")]
         public int Quantidade { get; set; }
 
+        [Column("saldoAnterior")]
+        [Range(0, int.MaxValue, ErrorMessage = "O saldo anterior não pode ser negativo.")]
+        [Display(Name = "Saldo anterior")]
+        public int SaldoAnterior { get; set; }
+
+        [Column("saldoPosterior")]
+        [Range(0, int.MaxValue, ErrorMessage = "O saldo posterior não pode ser negativo.")]
+        [Display(Name = "Saldo posterior")]
+        public int SaldoPosterior { get; set; }
+
+        [Column("motivo")]
+        [Required(ErrorMessage = "O motivo da movimentação é obrigatório.")]
+        [StringLength(100)]
+        [Display(Name = "Motivo da movimentação")]
+        public string Motivo { get; set; } = string.Empty;
+
+        [Column("orcamentoId")]
+        [Display(Name = "Orçamento")]
+        public int? OrcamentoId { get; set; }
+        [ForeignKey(nameof(OrcamentoId))] public Orcamento? Orcamento { get; set; }
+
         [Column("dataMovimentacao")] public DateTime DataMovimentacao { get; set; } = DateTime.Now;
 
         [Column("obs")]

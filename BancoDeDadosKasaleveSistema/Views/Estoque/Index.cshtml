@@ -1,0 +1,71 @@
+@model IEnumerable<BancoDeDadosKasaleveSistema.Models.Estoque>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProdutoVariacaoId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProdutoVariacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Localizacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantidade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataModificacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EstoqueMinimo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Movimentacoes)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.ProdutoVariacaoId)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.ProdutoVariacao)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Localizacao)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Quantidade)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.DataModificacao)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.EstoqueMinimo)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Movimentacoes)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.EstoqueId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.EstoqueId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.EstoqueId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

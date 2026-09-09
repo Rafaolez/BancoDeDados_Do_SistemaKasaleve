@@ -1,0 +1,45 @@
+@model BancoDeDadosKasaleveSistema.Models.AluminioCor
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>AluminioCor</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CorAluminioCor)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CorAluminioCor)
+        </dd>
+    </dl>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Codigo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Codigo)
+        </dd>
+    </dl>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SKUAluminioCor)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SKUAluminioCor)
+        </dd>
+    </dl>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.HexCor)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.HexCor)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.AluminioCorId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -12,6 +12,11 @@ namespace BancoDeDadosKasaleveSistema.Models
 
         [ForeignKey(nameof(OrcamentoId))] public Orcamento? Orcamento { get; set; }
 
+        private object OrcamentoId()
+        {
+            throw new NotImplementedException();
+        }
+
         [Column("ChecklistenderecoEntrega")]
         [StringLength(255)]
         [Display(Name = "Endereço de entrega")]

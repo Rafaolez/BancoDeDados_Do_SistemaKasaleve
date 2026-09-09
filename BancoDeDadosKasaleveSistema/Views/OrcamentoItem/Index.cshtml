@@ -1,0 +1,89 @@
+@model IEnumerable<BancoDeDadosKasaleveSistema.Models.OrcamentoItem>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Orcamento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProdutoVariacaoId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProdutoVariacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantidade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorUnitario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorExtra)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Desconto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorTotal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Obs)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NomeProdutoSnapshot)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(model => item.Orcamento)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.ProdutoVariacaoId)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.ProdutoVariacao)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Quantidade)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.ValorUnitario)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.ValorExtra)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Desconto)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.ValorTotal)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Obs)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.NomeProdutoSnapshot)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.OrcamentoItemId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.OrcamentoItemId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.OrcamentoItemId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
