@@ -1,149 +1,123 @@
-
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BancoDeDadosKasaleveSistema.Models;
+
+namespace BancoDeDadosKasaleveSistema.Controllers;
 
 public class CordaCorController : Controller
 {
     private readonly Contexto _context;
+    public CordaCorController(Contexto context) => _context = context;
 
-    public CordaCorController(Contexto context)
+    public async Task<IActionResult> Index() => View(await _context.CordaCor.AsNoTracking().ToListAsync());
+
+    public async Task<IActionResult> Details(int? id)
     {
-        _context = context;
+        if (id == null) return NotFound();
+        var model = await _context.CordaCor.AsNoTracking().FirstOrDefaultAsync(x => x.CordaCorId == id);
+        return model == null ? NotFound() : View(model);
     }
 
-    // GET: CORDACORS
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Create()
     {
-        return View(await _context.CordaCor.ToListAsync());
+        var model = new CordaCor();
+        await LoadOptionsAsync(model);
+        return View(model);
     }
 
-    // GET: CORDACORS/Details/5
-    public async Task<IActionResult> Details(int? cordacorid)
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("Nome,Sku,HexCor")] CordaCor model)
     {
-        if (cordacorid == null)
-        {
-            return NotFound();
-        }
-
-        var cordacor = await _context.CordaCor
-            .FirstOrDefaultAsync(m => m.CordaCorId == cordacorid);
-        if (cordacor == null)
-        {
-            return NotFound();
-        }
-
-        return View(cordacor);
-    }
-
-    // GET: CORDACORS/Create
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    // POST: CORDACORS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("CordaCorId,Nome,Sku,HexCor,Variacoes")] CordaCor cordacor)
-    {
+        await ValidateReferencesAsync(model);
         if (ModelState.IsValid)
         {
-            _context.Add(cordacor);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-        return View(cordacor);
-    }
-
-    // GET: CORDACORS/Edit/5
-    public async Task<IActionResult> Edit(int? cordacorid)
-    {
-        if (cordacorid == null)
-        {
-            return NotFound();
-        }
-
-        var cordacor = await _context.CordaCor.FindAsync(cordacorid);
-        if (cordacor == null)
-        {
-            return NotFound();
-        }
-        return View(cordacor);
-    }
-
-    // POST: CORDACORS/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? cordacorid, [Bind("CordaCorId,Nome,Sku,HexCor,Variacoes")] CordaCor cordacor)
-    {
-        if (cordacorid != cordacor.CordaCorId)
-        {
-            return NotFound();
-        }
-
-        if (ModelState.IsValid)
-        {
+            _context.Add(model);
             try
             {
-                _context.Update(cordacor);
                 await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Não foi possível salvar. Confira os dados e os registros relacionados.");
+            }
+        }
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null) return NotFound();
+        var model = await _context.CordaCor.FindAsync(id);
+        if (model == null) return NotFound();
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, [Bind("CordaCorId,Nome,Sku,HexCor")] CordaCor model)
+    {
+        if (id != model.CordaCorId) return NotFound();
+        var saved = await _context.CordaCor.FindAsync(id);
+        if (saved == null) return NotFound();
+        await ValidateReferencesAsync(model);
+        if (ModelState.IsValid)
+        {
+            saved.Nome = model.Nome;
+            saved.Sku = model.Sku;
+            saved.HexCor = model.HexCor;
+            try
+            {
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CordaCorExists(cordacor.CordaCorId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                ModelState.AddModelError("", "O registro foi alterado ou excluído. Recarregue e tente novamente.");
             }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Não foi possível salvar. Confira os dados e os registros relacionados.");
+            }
+        }
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null) return NotFound();
+        var model = await _context.CordaCor.AsNoTracking().FirstOrDefaultAsync(x => x.CordaCorId == id);
+        return model == null ? NotFound() : View(model);
+    }
+
+    [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var model = await _context.CordaCor.FindAsync(id);
+        if (model == null) return NotFound();
+        _context.CordaCor.Remove(model);
+        try
+        {
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        return View(cordacor);
+        catch (DbUpdateException)
+        {
+            ModelState.AddModelError("", "Este registro possui vínculos e não pode ser excluído.");
+            return View("Delete", model);
+        }
     }
 
-    // GET: CORDACORS/Delete/5
-    public async Task<IActionResult> Delete(int? cordacorid)
+    private async Task LoadOptionsAsync(CordaCor model)
     {
-        if (cordacorid == null)
-        {
-            return NotFound();
-        }
-
-        var cordacor = await _context.CordaCor
-            .FirstOrDefaultAsync(m => m.CordaCorId == cordacorid);
-        if (cordacor == null)
-        {
-            return NotFound();
-        }
-
-        return View(cordacor);
+        await Task.CompletedTask;
     }
 
-    // POST: CORDACORS/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? cordacorid)
+    private async Task ValidateReferencesAsync(CordaCor model)
     {
-        var cordacor = await _context.CordaCor.FindAsync(cordacorid);
-        if (cordacor != null)
-        {
-            _context.CordaCor.Remove(cordacor);
-        }
-
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
-
-    private bool CordaCorExists(int? cordacorid)
-    {
-        return _context.CordaCor.Any(e => e.CordaCorId == cordacorid);
+        await Task.CompletedTask;
     }
 }

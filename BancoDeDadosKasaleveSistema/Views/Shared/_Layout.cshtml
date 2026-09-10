@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,57 +24,27 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Cargo" asp-action="Index">Cargos</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Usuario" asp-action="Index">Usuários</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Categoria" asp-action="Index">Categorias</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="AluminioCor" asp-action="Index">Cores de alumínio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="CordaCor" asp-action="Index">Cores de corda</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="FibraCor" asp-action="Index">Cores de fibra</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Tecido" asp-action="Index">Tecidos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Produto" asp-action="Index">Produtos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="ProdutoVariacao" asp-action="Index">Variações de produtos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Estoque" asp-action="Index">Estoque</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="TipoMovimentacao" asp-action="Index">Tipos de movimentação</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Cliente" asp-action="Index">Clientes</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Orcamento" asp-action="Index">Orçamentos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="OrcamentoItem" asp-action="Index">Itens do orçamento</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Checklist" asp-action="Index">Checklist</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="MovimentacaoEstoque" asp-action="Index">Movimentações do estoque</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Historico" asp-action="Index">Histórico geral</a>
-                        </li>
-                    </ul>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Estoque" asp-action="Index">Estoque</a></li>
+<li class="nav-item"><a class="nav-link" asp-controller="MovimentacaoEstoque" asp-action="Index">Movimentações</a></li>
+<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Cadastros</a><ul class="dropdown-menu">
+<li><a class="dropdown-item" asp-controller="AluminioCor" asp-action="Index">AluminioCor</a></li>
+<li><a class="dropdown-item" asp-controller="Cargo" asp-action="Index">Cargo</a></li>
+<li><a class="dropdown-item" asp-controller="Categoria" asp-action="Index">Categoria</a></li>
+<li><a class="dropdown-item" asp-controller="Checklist" asp-action="Index">Checklist</a></li>
+<li><a class="dropdown-item" asp-controller="Cliente" asp-action="Index">Cliente</a></li>
+<li><a class="dropdown-item" asp-controller="CordaCor" asp-action="Index">CordaCor</a></li>
+<li><a class="dropdown-item" asp-controller="FibraCor" asp-action="Index">FibraCor</a></li>
+<li><a class="dropdown-item" asp-controller="Historico" asp-action="Index">Historico</a></li>
+<li><a class="dropdown-item" asp-controller="Orcamento" asp-action="Index">Orcamento</a></li>
+<li><a class="dropdown-item" asp-controller="OrcamentoItem" asp-action="Index">OrcamentoItem</a></li>
+<li><a class="dropdown-item" asp-controller="Produto" asp-action="Index">Produto</a></li>
+<li><a class="dropdown-item" asp-controller="ProdutoVariacao" asp-action="Index">ProdutoVariacao</a></li>
+<li><a class="dropdown-item" asp-controller="Tecido" asp-action="Index">Tecido</a></li>
+<li><a class="dropdown-item" asp-controller="TipoMovimentacao" asp-action="Index">TipoMovimentacao</a></li>
+<li><a class="dropdown-item" asp-controller="Usuario" asp-action="Index">Usuario</a></li>
+</ul></li></ul>
                 </div>
             </div>
         </nav>

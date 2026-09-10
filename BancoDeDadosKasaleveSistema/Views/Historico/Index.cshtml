@@ -6,18 +6,14 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.UsuarioId)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Usuario)
-            </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.Entidade)
             </th>
@@ -42,9 +38,7 @@
             <td>
                 @Html.DisplayFor(model => item.UsuarioId)
             </td>
-            <td>
-                @Html.DisplayFor(model => item.Usuario)
-            </td>
+
             <td>
                 @Html.DisplayFor(model => item.Entidade)
             </td>
@@ -61,10 +55,9 @@
                 @Html.DisplayFor(model => item.DataHora)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.HistoricoId">Edit</a> |
+
                 <a asp-action="Details" asp-route-id="@item.HistoricoId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.HistoricoId">Delete</a>
-            </td>
+                </td>
         </tr>
 }
     </tbody>

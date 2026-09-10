@@ -8,14 +8,11 @@ namespace BancoDeDadosKasaleveSistema.Models
     {
         [Column("OrcamentoItemId")]
         [Display(Name = "OrcamentoItemId")]
-        public string OrcamentoItemId { get; set; }
+        public string OrcamentoItemId { get; set; } = Guid.NewGuid().ToString("N");
 
+        [Column("OrcamentoId")]
+        public int? OrcamentoId { get; set; }
         [ForeignKey(nameof(OrcamentoId))] public Orcamento? Orcamento { get; set; }
-
-        private object OrcamentoId()
-        {
-            throw new NotImplementedException();
-        }
 
         [Column("produtoVariacaoId")]
         [Required(ErrorMessage = "O produto/variação é obrigatório.")]

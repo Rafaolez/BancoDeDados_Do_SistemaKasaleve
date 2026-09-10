@@ -42,12 +42,8 @@
             <th>
                 @Html.DisplayNameFor(model => model.UsuarioId)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Usuario)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Orcamentos)
-            </th>
+
+
             <th></th>
         </tr>
     </thead>
@@ -84,12 +80,8 @@
             <td>
                 @Html.DisplayFor(model => item.UsuarioId)
             </td>
-            <td>
-                @Html.DisplayFor(model => item.Usuario)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Orcamentos)
-            </td>
+
+
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ClienteId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ClienteId">Details</a> |

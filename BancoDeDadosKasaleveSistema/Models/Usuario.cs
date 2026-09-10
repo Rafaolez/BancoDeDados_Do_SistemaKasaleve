@@ -26,6 +26,8 @@ namespace BancoDeDadosKasaleveSistema.Models
         public string? Telefone { get; set; }
 
         [Column("senhaHash")]
+        [Microsoft.AspNetCore.Mvc.ModelBinding.BindNever]
+        [Microsoft.AspNetCore.Mvc.ModelBinding.Validation.ValidateNever]
         [StringLength(255)]
         public string SenhaHash { get; set; } = string.Empty;
 

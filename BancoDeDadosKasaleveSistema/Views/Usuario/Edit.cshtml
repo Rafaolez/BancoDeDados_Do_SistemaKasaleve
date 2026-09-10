@@ -1,94 +1,29 @@
 @model BancoDeDadosKasaleveSistema.Models.Usuario
-
-@{
-    ViewData["Title"] = "Edit";
-}
-
-<h1>Edit</h1>
-
-<h4>Usuario</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="UsuarioId" />
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Telefone" class="control-label"></label>
-                <input asp-for="Telefone" class="form-control" />
-                <span asp-validation-for="Telefone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SenhaHash" class="control-label"></label>
-                <input asp-for="SenhaHash" class="form-control" />
-                <span asp-validation-for="SenhaHash" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Senha" class="control-label"></label>
-                <input asp-for="Senha" class="form-control" />
-                <span asp-validation-for="Senha" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DataCadastro" class="control-label"></label>
-                <input asp-for="DataCadastro" class="form-control" />
-                <span asp-validation-for="DataCadastro" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CargoId" class="control-label"></label>
-                <input asp-for="CargoId" class="form-control" />
-                <span asp-validation-for="CargoId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Cargo" class="control-label"></label>
-                <input asp-for="Cargo" class="form-control" />
-                <span asp-validation-for="Cargo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClientesResponsavel" class="control-label"></label>
-                <input asp-for="ClientesResponsavel" class="form-control" />
-                <span asp-validation-for="ClientesResponsavel" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Orcamentos" class="control-label"></label>
-                <input asp-for="Orcamentos" class="form-control" />
-                <span asp-validation-for="Orcamentos" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Movimentacoes" class="control-label"></label>
-                <input asp-for="Movimentacoes" class="form-control" />
-                <span asp-validation-for="Movimentacoes" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Checklists" class="control-label"></label>
-                <input asp-for="Checklists" class="form-control" />
-                <span asp-validation-for="Checklists" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+@{ ViewData["Title"] = "Editar Usuario"; }
+<h1>@ViewData["Title"]</h1>
+<form asp-action="Edit" method="post" class="col-md-6">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input type="hidden" asp-for="UsuarioId" />
+    <div class="mb-3"><label asp-for="Nome" class="form-label"></label>
+        <input asp-for="Nome" class="form-control" />
+        <span asp-validation-for="Nome" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Telefone" class="form-label"></label>
+        <input asp-for="Telefone" class="form-control" />
+        <span asp-validation-for="Telefone" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Senha" class="form-label"></label>
+        <input asp-for="Senha" class="form-control" autocomplete="new-password" />
+        <span asp-validation-for="Senha" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="CargoId" class="form-label"></label>
+        <select asp-for="CargoId" asp-items="@(ViewData["CargoId"] as Microsoft.AspNetCore.Mvc.Rendering.SelectList)" class="form-select"><option value="">Selecione</option></select>
+        <span asp-validation-for="CargoId" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Status" class="form-label"></label>
+        <input asp-for="Status" class="form-control" />
+        <span asp-validation-for="Status" class="text-danger"></span></div>
+<p>Deixe a senha vazia para manter a senha atual.</p>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

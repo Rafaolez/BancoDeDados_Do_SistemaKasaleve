@@ -1,115 +1,17 @@
 @model BancoDeDadosKasaleveSistema.Models.MovimentacaoEstoque
-
-@{
-    ViewData["Title"] = "Details";
-}
-
-<h1>Details</h1>
-
-<div>
-    <h4>MovimentacaoEstoque</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EstoqueId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EstoqueId)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Estoque)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Estoque)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TipoMovimentacaoId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TipoMovimentacaoId)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TipoMovimentacao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TipoMovimentacao)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Quantidade)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Quantidade)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SaldoAnterior)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SaldoAnterior)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SaldoPosterior)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SaldoPosterior)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Motivo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Motivo)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.OrcamentoId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.OrcamentoId)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Orcamento)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Orcamento)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DataMovimentacao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DataMovimentacao)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Obs)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Obs)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UsuarioId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UsuarioId)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Usuario)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Usuario)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.MovimentacaoEstoqueId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+@{ ViewData["Title"] = "Detalhes da movimentação"; }
+<h1>Movimentação #@Model.MovimentacaoEstoqueId</h1>
+<dl class="row">
+<dt class="col-sm-3">Data</dt><dd class="col-sm-9">@Model.DataMovimentacao.ToString("dd/MM/yyyy HH:mm:ss")</dd>
+<dt class="col-sm-3">Produto e cores</dt><dd class="col-sm-9">@(Model.DescricaoVariacao ?? Model.Estoque?.ProdutoVariacao?.Sku)</dd>
+<dt class="col-sm-3">Tipo</dt><dd class="col-sm-9">@Model.TipoMovimentacao?.Nome</dd>
+<dt class="col-sm-3">Quantidade</dt><dd class="col-sm-9">@Model.Quantidade</dd>
+<dt class="col-sm-3">Saldo anterior → posterior</dt><dd class="col-sm-9">@Model.SaldoAnterior → @Model.SaldoPosterior</dd>
+<dt class="col-sm-3">Motivo</dt><dd class="col-sm-9">@Model.Motivo</dd>
+<dt class="col-sm-3">Responsável</dt><dd class="col-sm-9">@Model.Usuario?.Nome</dd>
+<dt class="col-sm-3">Orçamento</dt><dd class="col-sm-9">@Model.OrcamentoId</dd>
+<dt class="col-sm-3">Observações</dt><dd class="col-sm-9">@Model.Obs</dd>
+<dt class="col-sm-3">Local no registro</dt><dd class="col-sm-9">@(Model.LocalizacaoRegistro ?? Model.Estoque?.Localizacao)</dd>
+@if(Model.TransferenciaId.HasValue) { <dt class="col-sm-3">Transferência</dt><dd class="col-sm-9"><a asp-action="Index" asp-route-transferenciaId="@Model.TransferenciaId">Ver origem e destino</a></dd> }
+</dl>
+<a asp-action="Index" asp-route-estoqueId="@Model.EstoqueId" class="btn btn-outline-secondary">Voltar ao histórico</a>

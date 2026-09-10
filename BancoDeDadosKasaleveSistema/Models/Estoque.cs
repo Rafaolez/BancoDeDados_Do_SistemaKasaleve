@@ -17,6 +17,7 @@ namespace BancoDeDadosKasaleveSistema.Models
         [ForeignKey(nameof(ProdutoVariacaoId))] public ProdutoVariacao? ProdutoVariacao { get; set; }
 
         [Column("localizacao")]
+        [Required(ErrorMessage = "Informe a localização.")]
         [StringLength(100)]
         [Display(Name = "Localização")]
         public string? Localizacao { get; set; }
@@ -30,6 +31,9 @@ namespace BancoDeDadosKasaleveSistema.Models
         [Column("estoqueMinimo")]
         [Display(Name = "Estoque mínimo")]
         public int EstoqueMinimo { get; set; } = 0;
+
+        [NotMapped]
+        public string DescricaoCompleta => $"{ProdutoVariacao?.DescricaoCompleta} — {Localizacao} (saldo: {Quantidade})";
 
         public ICollection<MovimentacaoEstoque>? Movimentacoes { get; set; }
 

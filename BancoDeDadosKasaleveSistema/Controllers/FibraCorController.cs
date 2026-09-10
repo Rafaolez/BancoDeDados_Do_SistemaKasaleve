@@ -1,149 +1,123 @@
-
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BancoDeDadosKasaleveSistema.Models;
+
+namespace BancoDeDadosKasaleveSistema.Controllers;
 
 public class FibraCorController : Controller
 {
     private readonly Contexto _context;
+    public FibraCorController(Contexto context) => _context = context;
 
-    public FibraCorController(Contexto context)
+    public async Task<IActionResult> Index() => View(await _context.FibraCor.AsNoTracking().ToListAsync());
+
+    public async Task<IActionResult> Details(int? id)
     {
-        _context = context;
+        if (id == null) return NotFound();
+        var model = await _context.FibraCor.AsNoTracking().FirstOrDefaultAsync(x => x.FibraCorId == id);
+        return model == null ? NotFound() : View(model);
     }
 
-    // GET: FIBRACORS
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Create()
     {
-        return View(await _context.FibraCor.ToListAsync());
+        var model = new FibraCor();
+        await LoadOptionsAsync(model);
+        return View(model);
     }
 
-    // GET: FIBRACORS/Details/5
-    public async Task<IActionResult> Details(int? fibracorid)
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("Nome,Sku,HexCor")] FibraCor model)
     {
-        if (fibracorid == null)
-        {
-            return NotFound();
-        }
-
-        var fibracor = await _context.FibraCor
-            .FirstOrDefaultAsync(m => m.FibraCorId == fibracorid);
-        if (fibracor == null)
-        {
-            return NotFound();
-        }
-
-        return View(fibracor);
-    }
-
-    // GET: FIBRACORS/Create
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    // POST: FIBRACORS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("FibraCorId,Nome,Sku,HexCor,Variacoes")] FibraCor fibracor)
-    {
+        await ValidateReferencesAsync(model);
         if (ModelState.IsValid)
         {
-            _context.Add(fibracor);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-        return View(fibracor);
-    }
-
-    // GET: FIBRACORS/Edit/5
-    public async Task<IActionResult> Edit(int? fibracorid)
-    {
-        if (fibracorid == null)
-        {
-            return NotFound();
-        }
-
-        var fibracor = await _context.FibraCor.FindAsync(fibracorid);
-        if (fibracor == null)
-        {
-            return NotFound();
-        }
-        return View(fibracor);
-    }
-
-    // POST: FIBRACORS/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? fibracorid, [Bind("FibraCorId,Nome,Sku,HexCor,Variacoes")] FibraCor fibracor)
-    {
-        if (fibracorid != fibracor.FibraCorId)
-        {
-            return NotFound();
-        }
-
-        if (ModelState.IsValid)
-        {
+            _context.Add(model);
             try
             {
-                _context.Update(fibracor);
                 await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Não foi possível salvar. Confira os dados e os registros relacionados.");
+            }
+        }
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null) return NotFound();
+        var model = await _context.FibraCor.FindAsync(id);
+        if (model == null) return NotFound();
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, [Bind("FibraCorId,Nome,Sku,HexCor")] FibraCor model)
+    {
+        if (id != model.FibraCorId) return NotFound();
+        var saved = await _context.FibraCor.FindAsync(id);
+        if (saved == null) return NotFound();
+        await ValidateReferencesAsync(model);
+        if (ModelState.IsValid)
+        {
+            saved.Nome = model.Nome;
+            saved.Sku = model.Sku;
+            saved.HexCor = model.HexCor;
+            try
+            {
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!FibraCorExists(fibracor.FibraCorId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                ModelState.AddModelError("", "O registro foi alterado ou excluído. Recarregue e tente novamente.");
             }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Não foi possível salvar. Confira os dados e os registros relacionados.");
+            }
+        }
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null) return NotFound();
+        var model = await _context.FibraCor.AsNoTracking().FirstOrDefaultAsync(x => x.FibraCorId == id);
+        return model == null ? NotFound() : View(model);
+    }
+
+    [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var model = await _context.FibraCor.FindAsync(id);
+        if (model == null) return NotFound();
+        _context.FibraCor.Remove(model);
+        try
+        {
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        return View(fibracor);
+        catch (DbUpdateException)
+        {
+            ModelState.AddModelError("", "Este registro possui vínculos e não pode ser excluído.");
+            return View("Delete", model);
+        }
     }
 
-    // GET: FIBRACORS/Delete/5
-    public async Task<IActionResult> Delete(int? fibracorid)
+    private async Task LoadOptionsAsync(FibraCor model)
     {
-        if (fibracorid == null)
-        {
-            return NotFound();
-        }
-
-        var fibracor = await _context.FibraCor
-            .FirstOrDefaultAsync(m => m.FibraCorId == fibracorid);
-        if (fibracor == null)
-        {
-            return NotFound();
-        }
-
-        return View(fibracor);
+        await Task.CompletedTask;
     }
 
-    // POST: FIBRACORS/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? fibracorid)
+    private async Task ValidateReferencesAsync(FibraCor model)
     {
-        var fibracor = await _context.FibraCor.FindAsync(fibracorid);
-        if (fibracor != null)
-        {
-            _context.FibraCor.Remove(fibracor);
-        }
-
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
-
-    private bool FibraCorExists(int? fibracorid)
-    {
-        return _context.FibraCor.Any(e => e.FibraCorId == fibracorid);
+        await Task.CompletedTask;
     }
 }

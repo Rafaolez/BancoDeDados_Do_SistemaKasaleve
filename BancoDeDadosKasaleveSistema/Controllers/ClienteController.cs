@@ -1,149 +1,130 @@
-
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BancoDeDadosKasaleveSistema.Models;
+
+namespace BancoDeDadosKasaleveSistema.Controllers;
 
 public class ClienteController : Controller
 {
     private readonly Contexto _context;
+    public ClienteController(Contexto context) => _context = context;
 
-    public ClienteController(Contexto context)
+    public async Task<IActionResult> Index() => View(await _context.Cliente.AsNoTracking().Include(x => x.Usuario).ToListAsync());
+
+    public async Task<IActionResult> Details(int? id)
     {
-        _context = context;
+        if (id == null) return NotFound();
+        var model = await _context.Cliente.AsNoTracking().Include(x => x.Usuario).FirstOrDefaultAsync(x => x.ClienteId == id);
+        return model == null ? NotFound() : View(model);
     }
 
-    // GET: CLIENTES
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Create()
     {
-        return View(await _context.Cliente.ToListAsync());
+        var model = new Cliente();
+        await LoadOptionsAsync(model);
+        return View(model);
     }
 
-    // GET: CLIENTES/Details/5
-    public async Task<IActionResult> Details(int? clienteid)
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("Nome,CpfCnpj,Telefone,Endereco,Cidade,Estado,Cep,Status,UsuarioId")] Cliente model)
     {
-        if (clienteid == null)
-        {
-            return NotFound();
-        }
-
-        var cliente = await _context.Cliente
-            .FirstOrDefaultAsync(m => m.ClienteId == clienteid);
-        if (cliente == null)
-        {
-            return NotFound();
-        }
-
-        return View(cliente);
-    }
-
-    // GET: CLIENTES/Create
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    // POST: CLIENTES/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("ClienteId,Nome,CpfCnpj,Telefone,Endereco,Cidade,Estado,Cep,DataCadastro,Status,UsuarioId,Usuario,Orcamentos")] Cliente cliente)
-    {
+        await ValidateReferencesAsync(model);
         if (ModelState.IsValid)
         {
-            _context.Add(cliente);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-        return View(cliente);
-    }
-
-    // GET: CLIENTES/Edit/5
-    public async Task<IActionResult> Edit(int? clienteid)
-    {
-        if (clienteid == null)
-        {
-            return NotFound();
-        }
-
-        var cliente = await _context.Cliente.FindAsync(clienteid);
-        if (cliente == null)
-        {
-            return NotFound();
-        }
-        return View(cliente);
-    }
-
-    // POST: CLIENTES/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? clienteid, [Bind("ClienteId,Nome,CpfCnpj,Telefone,Endereco,Cidade,Estado,Cep,DataCadastro,Status,UsuarioId,Usuario,Orcamentos")] Cliente cliente)
-    {
-        if (clienteid != cliente.ClienteId)
-        {
-            return NotFound();
-        }
-
-        if (ModelState.IsValid)
-        {
+            _context.Add(model);
             try
             {
-                _context.Update(cliente);
                 await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Não foi possível salvar. Confira os dados e os registros relacionados.");
+            }
+        }
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null) return NotFound();
+        var model = await _context.Cliente.FindAsync(id);
+        if (model == null) return NotFound();
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, [Bind("ClienteId,Nome,CpfCnpj,Telefone,Endereco,Cidade,Estado,Cep,Status,UsuarioId")] Cliente model)
+    {
+        if (id != model.ClienteId) return NotFound();
+        var saved = await _context.Cliente.FindAsync(id);
+        if (saved == null) return NotFound();
+        await ValidateReferencesAsync(model);
+        if (ModelState.IsValid)
+        {
+            saved.Nome = model.Nome;
+            saved.CpfCnpj = model.CpfCnpj;
+            saved.Telefone = model.Telefone;
+            saved.Endereco = model.Endereco;
+            saved.Cidade = model.Cidade;
+            saved.Estado = model.Estado;
+            saved.Cep = model.Cep;
+            saved.Status = model.Status;
+            saved.UsuarioId = model.UsuarioId;
+            try
+            {
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ClienteExists(cliente.ClienteId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                ModelState.AddModelError("", "O registro foi alterado ou excluído. Recarregue e tente novamente.");
             }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Não foi possível salvar. Confira os dados e os registros relacionados.");
+            }
+        }
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null) return NotFound();
+        var model = await _context.Cliente.AsNoTracking().Include(x => x.Usuario).FirstOrDefaultAsync(x => x.ClienteId == id);
+        return model == null ? NotFound() : View(model);
+    }
+
+    [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var model = await _context.Cliente.FindAsync(id);
+        if (model == null) return NotFound();
+        _context.Cliente.Remove(model);
+        try
+        {
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        return View(cliente);
+        catch (DbUpdateException)
+        {
+            ModelState.AddModelError("", "Este registro possui vínculos e não pode ser excluído.");
+            return View("Delete", model);
+        }
     }
 
-    // GET: CLIENTES/Delete/5
-    public async Task<IActionResult> Delete(int? clienteid)
+    private async Task LoadOptionsAsync(Cliente model)
     {
-        if (clienteid == null)
-        {
-            return NotFound();
-        }
-
-        var cliente = await _context.Cliente
-            .FirstOrDefaultAsync(m => m.ClienteId == clienteid);
-        if (cliente == null)
-        {
-            return NotFound();
-        }
-
-        return View(cliente);
+        ViewData["UsuarioId"] = new SelectList(await _context.Usuario.AsNoTracking().ToListAsync(), "UsuarioId", "Nome", model.UsuarioId);
     }
 
-    // POST: CLIENTES/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? clienteid)
+    private async Task ValidateReferencesAsync(Cliente model)
     {
-        var cliente = await _context.Cliente.FindAsync(clienteid);
-        if (cliente != null)
-        {
-            _context.Cliente.Remove(cliente);
-        }
-
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
-
-    private bool ClienteExists(int? clienteid)
-    {
-        return _context.Cliente.Any(e => e.ClienteId == clienteid);
+        if (model.UsuarioId.HasValue && !await _context.Usuario.AnyAsync(x => x.UsuarioId == model.UsuarioId))
+            ModelState.AddModelError("UsuarioId", "Selecione um registro válido.");
     }
 }

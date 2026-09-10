@@ -1,149 +1,136 @@
-
 using Microsoft.AspNetCore.Mvc;
+using BancoDeDadosKasaleveSistema.Services;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BancoDeDadosKasaleveSistema.Models;
+
+namespace BancoDeDadosKasaleveSistema.Controllers;
 
 public class EstoqueController : Controller
 {
     private readonly Contexto _context;
+    public EstoqueController(Contexto context) => _context = context;
 
-    public EstoqueController(Contexto context)
+    public async Task<IActionResult> Index() => View(await _context.Estoque.AsNoTracking().ComCores().ToListAsync());
+
+    public async Task<IActionResult> Details(int? id)
     {
-        _context = context;
+        if (id == null) return NotFound();
+        var model = await _context.Estoque.AsNoTracking().ComCores().FirstOrDefaultAsync(x => x.EstoqueId == id);
+        return model == null ? NotFound() : View(model);
     }
 
-    // GET: ESTOQUES
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Create()
     {
-        return View(await _context.Estoque.ToListAsync());
+        var model = new Estoque();
+        await LoadOptionsAsync(model);
+        return View(model);
     }
 
-    // GET: ESTOQUES/Details/5
-    public async Task<IActionResult> Details(int? estoqueid)
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("ProdutoVariacaoId,Localizacao,EstoqueMinimo")] Estoque model)
     {
-        if (estoqueid == null)
-        {
-            return NotFound();
-        }
-
-        var estoque = await _context.Estoque
-            .FirstOrDefaultAsync(m => m.EstoqueId == estoqueid);
-        if (estoque == null)
-        {
-            return NotFound();
-        }
-
-        return View(estoque);
-    }
-
-    // GET: ESTOQUES/Create
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    // POST: ESTOQUES/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("EstoqueId,ProdutoVariacaoId,ProdutoVariacao,Localizacao,Quantidade,DataModificacao,EstoqueMinimo,Movimentacoes")] Estoque estoque)
-    {
+        model.Localizacao = model.Localizacao?.Trim();
+        await ValidateReferencesAsync(model);
+        if (await _context.Estoque.AnyAsync(x => x.ProdutoVariacaoId == model.ProdutoVariacaoId && x.Localizacao == model.Localizacao))
+            ModelState.AddModelError("ProdutoVariacaoId", "Esta variação já possui estoque neste local.");
         if (ModelState.IsValid)
         {
-            _context.Add(estoque);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-        return View(estoque);
-    }
-
-    // GET: ESTOQUES/Edit/5
-    public async Task<IActionResult> Edit(int? estoqueid)
-    {
-        if (estoqueid == null)
-        {
-            return NotFound();
-        }
-
-        var estoque = await _context.Estoque.FindAsync(estoqueid);
-        if (estoque == null)
-        {
-            return NotFound();
-        }
-        return View(estoque);
-    }
-
-    // POST: ESTOQUES/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? estoqueid, [Bind("EstoqueId,ProdutoVariacaoId,ProdutoVariacao,Localizacao,Quantidade,DataModificacao,EstoqueMinimo,Movimentacoes")] Estoque estoque)
-    {
-        if (estoqueid != estoque.EstoqueId)
-        {
-            return NotFound();
-        }
-
-        if (ModelState.IsValid)
-        {
+            _context.Add(model);
             try
             {
-                _context.Update(estoque);
                 await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Não foi possível salvar. Confira os dados e os registros relacionados.");
+            }
+        }
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null) return NotFound();
+        var model = await _context.Estoque.FindAsync(id);
+        if (model == null) return NotFound();
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, [Bind("EstoqueId,EstoqueMinimo")] Estoque model)
+    {
+        if (id != model.EstoqueId) return NotFound();
+        var saved = await _context.Estoque.FindAsync(id);
+        if (saved == null) return NotFound();
+        model.ProdutoVariacaoId = saved.ProdutoVariacaoId;
+        model.Localizacao = saved.Localizacao;
+        ModelState.Remove(nameof(Estoque.Localizacao));
+        await ValidateReferencesAsync(model);
+        if (ModelState.IsValid)
+        {
+            saved.EstoqueMinimo = model.EstoqueMinimo;
+            saved.DataModificacao = DateTime.Now;
+            try
+            {
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!EstoqueExists(estoque.EstoqueId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                ModelState.AddModelError("", "O registro foi alterado ou excluído. Recarregue e tente novamente.");
             }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Não foi possível salvar. Confira os dados e os registros relacionados.");
+            }
+        }
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null) return NotFound();
+        var model = await _context.Estoque.AsNoTracking().ComCores().FirstOrDefaultAsync(x => x.EstoqueId == id);
+        return model == null ? NotFound() : View(model);
+    }
+
+    [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var model = await _context.Estoque.FindAsync(id);
+        if (model == null) return NotFound();
+        if (model.Quantidade != 0 || await _context.MovimentacaoEstoque.AnyAsync(m => m.EstoqueId == id))
+        {
+            ModelState.AddModelError("", "Um estoque com saldo ou movimentações não pode ser excluído.");
+            return View("Delete", model);
+        }
+        _context.Estoque.Remove(model);
+        try
+        {
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        return View(estoque);
+        catch (DbUpdateException)
+        {
+            ModelState.AddModelError("", "Este registro possui vínculos e não pode ser excluído.");
+            return View("Delete", model);
+        }
     }
 
-    // GET: ESTOQUES/Delete/5
-    public async Task<IActionResult> Delete(int? estoqueid)
+    private async Task LoadOptionsAsync(Estoque model)
     {
-        if (estoqueid == null)
-        {
-            return NotFound();
-        }
-
-        var estoque = await _context.Estoque
-            .FirstOrDefaultAsync(m => m.EstoqueId == estoqueid);
-        if (estoque == null)
-        {
-            return NotFound();
-        }
-
-        return View(estoque);
+        ViewData["ProdutoVariacaoId"] = new SelectList(await _context.ProdutoVariacao.AsNoTracking().ComCores().Where(v => v.Ativo).ToListAsync(), "ProdutoVariacaoId", "DescricaoCompleta", model.ProdutoVariacaoId);
     }
 
-    // POST: ESTOQUES/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? estoqueid)
+    private async Task ValidateReferencesAsync(Estoque model)
     {
-        var estoque = await _context.Estoque.FindAsync(estoqueid);
-        if (estoque != null)
-        {
-            _context.Estoque.Remove(estoque);
-        }
-
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
-
-    private bool EstoqueExists(int? estoqueid)
-    {
-        return _context.Estoque.Any(e => e.EstoqueId == estoqueid);
+        if (model.EstoqueMinimo < 0) ModelState.AddModelError("EstoqueMinimo", "O estoque mínimo não pode ser negativo.");
+        if (!await _context.ProdutoVariacao.AnyAsync(x => x.ProdutoVariacaoId == model.ProdutoVariacaoId))
+            ModelState.AddModelError("ProdutoVariacaoId", "Selecione um registro válido.");
     }
 }

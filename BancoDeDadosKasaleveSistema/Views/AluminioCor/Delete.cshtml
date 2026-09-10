@@ -42,7 +42,7 @@
             @Html.DisplayFor(model => model.HexCor)
         </dd>
     </dl>
-    <form asp-action="Delete">
+    <form asp-action="Delete" asp-route-id="@Model.AluminioCorId"><div asp-validation-summary="All" class="text-danger"></div>
         <input type="hidden" asp-for="AluminioCorId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>

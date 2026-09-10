@@ -1,0 +1,20 @@
+@model BancoDeDadosKasaleveSistema.ViewModels.TransferenciaEstoqueForm
+@{ ViewData["Title"] = "Transferir entre locais"; }
+<h1>Transferir entre locais</h1>
+<p>Cadastre a mesma variação no local de destino com saldo zero. A transferência desconta da origem e soma no destino, sem mudar o total.</p>
+<form asp-action="Transferir" method="post" class="col-md-8"><div asp-validation-summary="All" class="text-danger"></div>
+<div class="mb-3"><label asp-for="EstoqueOrigemId" class="form-label"></label><select asp-for="EstoqueOrigemId" asp-items="@(ViewData["EstoqueOrigemId"] as Microsoft.AspNetCore.Mvc.Rendering.SelectList)" class="form-select"><option value="">Selecione</option></select><span asp-validation-for="EstoqueOrigemId" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="EstoqueDestinoId" class="form-label"></label><select asp-for="EstoqueDestinoId" asp-items="@(ViewData["EstoqueDestinoId"] as Microsoft.AspNetCore.Mvc.Rendering.SelectList)" class="form-select"><option value="">Selecione</option></select><span asp-validation-for="EstoqueDestinoId" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="Quantidade" class="form-label"></label><input asp-for="Quantidade" class="form-control" /><span asp-validation-for="Quantidade" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="UsuarioId" class="form-label"></label><select asp-for="UsuarioId" asp-items="@(ViewData["UsuarioId"] as Microsoft.AspNetCore.Mvc.Rendering.SelectList)" class="form-select"><option value="">Selecione</option></select><span asp-validation-for="UsuarioId" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="Motivo" class="form-label"></label><input asp-for="Motivo" class="form-control" /><span asp-validation-for="Motivo" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="Obs" class="form-label"></label><input asp-for="Obs" class="form-control" /><span asp-validation-for="Obs" class="text-danger"></span></div>
+<button type="submit" class="btn btn-primary">Transferir</button> <a asp-controller="Estoque" asp-action="Index">Voltar</a></form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById('EstoqueOrigemId').addEventListener('change', function () {
+            window.location.href = '@Url.Action("Transferir")' + '?estoqueId=' + encodeURIComponent(this.value);
+        });
+    </script>
+}

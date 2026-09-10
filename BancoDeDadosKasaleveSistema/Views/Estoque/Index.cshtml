@@ -1,71 +1,19 @@
 @model IEnumerable<BancoDeDadosKasaleveSistema.Models.Estoque>
-
-@{
-    ViewData["Title"] = "Index";
+@{ ViewData["Title"] = "Estoque por produto, cores e local"; }
+<h1>Estoque por local</h1>
+<p>Cada combinação de cores é uma variação. A mesma variação pode ter saldo na loja, no depósito e em outros locais.</p>
+<p><a asp-action="Create" class="btn btn-primary">Cadastrar variação em um local</a> <a asp-controller="ProdutoVariacao" asp-action="Create" class="btn btn-outline-secondary">Nova combinação de cores</a></p>
+<div class="table-responsive"><table class="table table-striped"><thead><tr><th>Produto e cores</th><th>Local</th><th>Saldo</th><th>Mínimo</th><th>Ações</th></tr></thead><tbody>
+@foreach(var item in Model)
+{
+<tr><td>@item.ProdutoVariacao?.DescricaoCompleta</td><td>@item.Localizacao</td><td>@item.Quantidade</td><td>@item.EstoqueMinimo</td><td>
+<a asp-controller="MovimentacaoEstoque" asp-action="Create" asp-route-estoqueId="@item.EstoqueId">Entrada / saída</a> |
+<a asp-controller="MovimentacaoEstoque" asp-action="Transferir" asp-route-estoqueId="@item.EstoqueId">Transferir</a> |
+<a asp-controller="MovimentacaoEstoque" asp-action="Index" asp-route-estoqueId="@item.EstoqueId">Histórico</a> |
+<a asp-action="Edit" asp-route-id="@item.EstoqueId">Editar mínimo</a> |
+<a asp-action="Details" asp-route-id="@item.EstoqueId">Detalhes</a> |
+<a asp-action="Delete" asp-route-id="@item.EstoqueId">Excluir</a>
+</td></tr>
 }
-
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ProdutoVariacaoId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProdutoVariacao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Localizacao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quantidade)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataModificacao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EstoqueMinimo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Movimentacoes)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.ProdutoVariacaoId)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.ProdutoVariacao)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Localizacao)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Quantidade)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.DataModificacao)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.EstoqueMinimo)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Movimentacoes)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.EstoqueId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EstoqueId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EstoqueId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+@if(!Model.Any()) { <tr><td colspan="5">Nenhum estoque cadastrado. Cadastre primeiro o produto e sua combinação de cores.</td></tr> }
+</tbody></table></div>

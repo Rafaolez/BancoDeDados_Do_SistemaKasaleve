@@ -1,49 +1,22 @@
 @model BancoDeDadosKasaleveSistema.Models.AluminioCor
-
-@{
-    ViewData["Title"] = "Edit";
-}
-
-<h1>Edit</h1>
-
-<h4>AluminioCor</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="AluminioCorId" />
-            <div class="form-group">
-                <label asp-for="CorAluminioCor" class="control-label"></label>
-                <input asp-for="CorAluminioCor" class="form-control" />
-                <span asp-validation-for="CorAluminioCor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Codigo" class="control-label"></label>
-                <input asp-for="Codigo" class="form-control" />
-                <span asp-validation-for="Codigo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SKUAluminioCor" class="control-label"></label>
-                <input asp-for="SKUAluminioCor" class="form-control" />
-                <span asp-validation-for="SKUAluminioCor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HexCor" class="control-label"></label>
-                <input asp-for="HexCor" class="form-control" />
-                <span asp-validation-for="HexCor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+@{ ViewData["Title"] = "Editar AluminioCor"; }
+<h1>@ViewData["Title"]</h1>
+<form asp-action="Edit" method="post" class="col-md-6">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input type="hidden" asp-for="AluminioCorId" />
+    <div class="mb-3"><label asp-for="CorAluminioCor" class="form-label"></label>
+        <input asp-for="CorAluminioCor" class="form-control" />
+        <span asp-validation-for="CorAluminioCor" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Codigo" class="form-label"></label>
+        <input asp-for="Codigo" class="form-control" />
+        <span asp-validation-for="Codigo" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="SKUAluminioCor" class="form-label"></label>
+        <input asp-for="SKUAluminioCor" class="form-control" />
+        <span asp-validation-for="SKUAluminioCor" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="HexCor" class="form-label"></label>
+        <input asp-for="HexCor" class="form-control" />
+        <span asp-validation-for="HexCor" class="text-danger"></span></div>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

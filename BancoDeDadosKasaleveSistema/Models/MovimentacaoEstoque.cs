@@ -10,6 +10,15 @@ namespace BancoDeDadosKasaleveSistema.Models
         [Display(Name = "MovimentacaoEstoqueId")]
         public int MovimentacaoEstoqueId { get; set; }
 
+        [Column("transferenciaId")]
+        public Guid? TransferenciaId { get; set; }
+
+        [Column("descricaoVariacao"), StringLength(1000)]
+        public string? DescricaoVariacao { get; set; }
+
+        [Column("localizacaoRegistro"), StringLength(100)]
+        public string? LocalizacaoRegistro { get; set; }
+
         [Column("estoqueId")]
         [Required]
         public int EstoqueId { get; set; }

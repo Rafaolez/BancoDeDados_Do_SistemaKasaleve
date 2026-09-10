@@ -1,149 +1,124 @@
-
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BancoDeDadosKasaleveSistema.Models;
+
+namespace BancoDeDadosKasaleveSistema.Controllers;
 
 public class AluminioCorController : Controller
 {
     private readonly Contexto _context;
+    public AluminioCorController(Contexto context) => _context = context;
 
-    public AluminioCorController(Contexto context)
+    public async Task<IActionResult> Index() => View(await _context.AluminioCor.AsNoTracking().ToListAsync());
+
+    public async Task<IActionResult> Details(int? id)
     {
-        _context = context;
+        if (id == null) return NotFound();
+        var model = await _context.AluminioCor.AsNoTracking().FirstOrDefaultAsync(x => x.AluminioCorId == id);
+        return model == null ? NotFound() : View(model);
     }
 
-    // GET: ALUMINIOCORS
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Create()
     {
-        return View(await _context.AluminioCor.ToListAsync());
+        var model = new AluminioCor();
+        await LoadOptionsAsync(model);
+        return View(model);
     }
 
-    // GET: ALUMINIOCORS/Details/5
-    public async Task<IActionResult> Details(int? aluminiocorid)
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("CorAluminioCor,Codigo,SKUAluminioCor,HexCor")] AluminioCor model)
     {
-        if (aluminiocorid == null)
-        {
-            return NotFound();
-        }
-
-        var aluminiocor = await _context.AluminioCor
-            .FirstOrDefaultAsync(m => m.AluminioCorId == aluminiocorid);
-        if (aluminiocor == null)
-        {
-            return NotFound();
-        }
-
-        return View(aluminiocor);
-    }
-
-    // GET: ALUMINIOCORS/Create
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    // POST: ALUMINIOCORS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("AluminioCorId,CorAluminioCor,Codigo,SKUAluminioCor,HexCor")] AluminioCor aluminiocor)
-    {
+        await ValidateReferencesAsync(model);
         if (ModelState.IsValid)
         {
-            _context.Add(aluminiocor);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-        return View(aluminiocor);
-    }
-
-    // GET: ALUMINIOCORS/Edit/5
-    public async Task<IActionResult> Edit(int? aluminiocorid)
-    {
-        if (aluminiocorid == null)
-        {
-            return NotFound();
-        }
-
-        var aluminiocor = await _context.AluminioCor.FindAsync(aluminiocorid);
-        if (aluminiocor == null)
-        {
-            return NotFound();
-        }
-        return View(aluminiocor);
-    }
-
-    // POST: ALUMINIOCORS/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? aluminiocorid, [Bind("AluminioCorId,CorAluminioCor,Codigo,SKUAluminioCor,HexCor")] AluminioCor aluminiocor)
-    {
-        if (aluminiocorid != aluminiocor.AluminioCorId)
-        {
-            return NotFound();
-        }
-
-        if (ModelState.IsValid)
-        {
+            _context.Add(model);
             try
             {
-                _context.Update(aluminiocor);
                 await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Não foi possível salvar. Confira os dados e os registros relacionados.");
+            }
+        }
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null) return NotFound();
+        var model = await _context.AluminioCor.FindAsync(id);
+        if (model == null) return NotFound();
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, [Bind("AluminioCorId,CorAluminioCor,Codigo,SKUAluminioCor,HexCor")] AluminioCor model)
+    {
+        if (id != model.AluminioCorId) return NotFound();
+        var saved = await _context.AluminioCor.FindAsync(id);
+        if (saved == null) return NotFound();
+        await ValidateReferencesAsync(model);
+        if (ModelState.IsValid)
+        {
+            saved.CorAluminioCor = model.CorAluminioCor;
+            saved.Codigo = model.Codigo;
+            saved.SKUAluminioCor = model.SKUAluminioCor;
+            saved.HexCor = model.HexCor;
+            try
+            {
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AluminioCorExists(aluminiocor.AluminioCorId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                ModelState.AddModelError("", "O registro foi alterado ou excluído. Recarregue e tente novamente.");
             }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Não foi possível salvar. Confira os dados e os registros relacionados.");
+            }
+        }
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null) return NotFound();
+        var model = await _context.AluminioCor.AsNoTracking().FirstOrDefaultAsync(x => x.AluminioCorId == id);
+        return model == null ? NotFound() : View(model);
+    }
+
+    [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var model = await _context.AluminioCor.FindAsync(id);
+        if (model == null) return NotFound();
+        _context.AluminioCor.Remove(model);
+        try
+        {
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        return View(aluminiocor);
+        catch (DbUpdateException)
+        {
+            ModelState.AddModelError("", "Este registro possui vínculos e não pode ser excluído.");
+            return View("Delete", model);
+        }
     }
 
-    // GET: ALUMINIOCORS/Delete/5
-    public async Task<IActionResult> Delete(int? aluminiocorid)
+    private async Task LoadOptionsAsync(AluminioCor model)
     {
-        if (aluminiocorid == null)
-        {
-            return NotFound();
-        }
-
-        var aluminiocor = await _context.AluminioCor
-            .FirstOrDefaultAsync(m => m.AluminioCorId == aluminiocorid);
-        if (aluminiocor == null)
-        {
-            return NotFound();
-        }
-
-        return View(aluminiocor);
+        await Task.CompletedTask;
     }
 
-    // POST: ALUMINIOCORS/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? aluminiocorid)
+    private async Task ValidateReferencesAsync(AluminioCor model)
     {
-        var aluminiocor = await _context.AluminioCor.FindAsync(aluminiocorid);
-        if (aluminiocor != null)
-        {
-            _context.AluminioCor.Remove(aluminiocor);
-        }
-
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
-
-    private bool AluminioCorExists(int? aluminiocorid)
-    {
-        return _context.AluminioCor.Any(e => e.AluminioCorId == aluminiocorid);
+        await Task.CompletedTask;
     }
 }

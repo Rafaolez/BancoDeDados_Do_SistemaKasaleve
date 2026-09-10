@@ -1,149 +1,123 @@
-
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BancoDeDadosKasaleveSistema.Models;
+
+namespace BancoDeDadosKasaleveSistema.Controllers;
 
 public class CargoController : Controller
 {
     private readonly Contexto _context;
+    public CargoController(Contexto context) => _context = context;
 
-    public CargoController(Contexto context)
+    public async Task<IActionResult> Index() => View(await _context.Cargo.AsNoTracking().ToListAsync());
+
+    public async Task<IActionResult> Details(int? id)
     {
-        _context = context;
+        if (id == null) return NotFound();
+        var model = await _context.Cargo.AsNoTracking().FirstOrDefaultAsync(x => x.CargoId == id);
+        return model == null ? NotFound() : View(model);
     }
 
-    // GET: CARGOS
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Create()
     {
-        return View(await _context.Cargo.ToListAsync());
+        var model = new Cargo();
+        await LoadOptionsAsync(model);
+        return View(model);
     }
 
-    // GET: CARGOS/Details/5
-    public async Task<IActionResult> Details(int? cargoid)
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("CargoNome,CargoDescricao,Ativo")] Cargo model)
     {
-        if (cargoid == null)
-        {
-            return NotFound();
-        }
-
-        var cargo = await _context.Cargo
-            .FirstOrDefaultAsync(m => m.CargoId == cargoid);
-        if (cargo == null)
-        {
-            return NotFound();
-        }
-
-        return View(cargo);
-    }
-
-    // GET: CARGOS/Create
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    // POST: CARGOS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("CargoId,CargoNome,CargoDescricao,Ativo")] Cargo cargo)
-    {
+        await ValidateReferencesAsync(model);
         if (ModelState.IsValid)
         {
-            _context.Add(cargo);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-        return View(cargo);
-    }
-
-    // GET: CARGOS/Edit/5
-    public async Task<IActionResult> Edit(int? cargoid)
-    {
-        if (cargoid == null)
-        {
-            return NotFound();
-        }
-
-        var cargo = await _context.Cargo.FindAsync(cargoid);
-        if (cargo == null)
-        {
-            return NotFound();
-        }
-        return View(cargo);
-    }
-
-    // POST: CARGOS/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? cargoid, [Bind("CargoId,CargoNome,CargoDescricao,Ativo")] Cargo cargo)
-    {
-        if (cargoid != cargo.CargoId)
-        {
-            return NotFound();
-        }
-
-        if (ModelState.IsValid)
-        {
+            _context.Add(model);
             try
             {
-                _context.Update(cargo);
                 await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Não foi possível salvar. Confira os dados e os registros relacionados.");
+            }
+        }
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null) return NotFound();
+        var model = await _context.Cargo.FindAsync(id);
+        if (model == null) return NotFound();
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, [Bind("CargoId,CargoNome,CargoDescricao,Ativo")] Cargo model)
+    {
+        if (id != model.CargoId) return NotFound();
+        var saved = await _context.Cargo.FindAsync(id);
+        if (saved == null) return NotFound();
+        await ValidateReferencesAsync(model);
+        if (ModelState.IsValid)
+        {
+            saved.CargoNome = model.CargoNome;
+            saved.CargoDescricao = model.CargoDescricao;
+            saved.Ativo = model.Ativo;
+            try
+            {
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CargoExists(cargo.CargoId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                ModelState.AddModelError("", "O registro foi alterado ou excluído. Recarregue e tente novamente.");
             }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Não foi possível salvar. Confira os dados e os registros relacionados.");
+            }
+        }
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null) return NotFound();
+        var model = await _context.Cargo.AsNoTracking().FirstOrDefaultAsync(x => x.CargoId == id);
+        return model == null ? NotFound() : View(model);
+    }
+
+    [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var model = await _context.Cargo.FindAsync(id);
+        if (model == null) return NotFound();
+        _context.Cargo.Remove(model);
+        try
+        {
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        return View(cargo);
+        catch (DbUpdateException)
+        {
+            ModelState.AddModelError("", "Este registro possui vínculos e não pode ser excluído.");
+            return View("Delete", model);
+        }
     }
 
-    // GET: CARGOS/Delete/5
-    public async Task<IActionResult> Delete(int? cargoid)
+    private async Task LoadOptionsAsync(Cargo model)
     {
-        if (cargoid == null)
-        {
-            return NotFound();
-        }
-
-        var cargo = await _context.Cargo
-            .FirstOrDefaultAsync(m => m.CargoId == cargoid);
-        if (cargo == null)
-        {
-            return NotFound();
-        }
-
-        return View(cargo);
+        await Task.CompletedTask;
     }
 
-    // POST: CARGOS/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? cargoid)
+    private async Task ValidateReferencesAsync(Cargo model)
     {
-        var cargo = await _context.Cargo.FindAsync(cargoid);
-        if (cargo != null)
-        {
-            _context.Cargo.Remove(cargo);
-        }
-
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
-
-    private bool CargoExists(int? cargoid)
-    {
-        return _context.Cargo.Any(e => e.CargoId == cargoid);
+        await Task.CompletedTask;
     }
 }

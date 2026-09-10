@@ -1,114 +1,36 @@
 @model BancoDeDadosKasaleveSistema.Models.Orcamento
-
-@{
-    ViewData["Title"] = "Create";
-}
-
-<h1>Create</h1>
-
-<h4>Orcamento</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="form-group">
-                <label asp-for="DataCriacao" class="control-label"></label>
-                <input asp-for="DataCriacao" class="form-control" />
-                <span asp-validation-for="DataCriacao" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Validade" class="control-label"></label>
-                <input asp-for="Validade" class="form-control" />
-                <span asp-validation-for="Validade" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ClienteId" class="control-label"></label>
-                <input asp-for="ClienteId" class="form-control" />
-                <span asp-validation-for="ClienteId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Cliente" class="control-label"></label>
-                <input asp-for="Cliente" class="form-control" />
-                <span asp-validation-for="Cliente" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="UsuarioId" class="control-label"></label>
-                <input asp-for="UsuarioId" class="form-control" />
-                <span asp-validation-for="UsuarioId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Usuario" class="control-label"></label>
-                <input asp-for="Usuario" class="form-control" />
-                <span asp-validation-for="Usuario" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="SubTotal" class="control-label"></label>
-                <input asp-for="SubTotal" class="form-control" />
-                <span asp-validation-for="SubTotal" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Desconto" class="control-label"></label>
-                <input asp-for="Desconto" class="form-control" />
-                <span asp-validation-for="Desconto" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Frete" class="control-label"></label>
-                <input asp-for="Frete" class="form-control" />
-                <span asp-validation-for="Frete" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Total" class="control-label"></label>
-                <input asp-for="Total" class="form-control" />
-                <span asp-validation-for="Total" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Obs" class="control-label"></label>
-                <input asp-for="Obs" class="form-control" />
-                <span asp-validation-for="Obs" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="DataAlteracao" class="control-label"></label>
-                <input asp-for="DataAlteracao" class="form-control" />
-                <span asp-validation-for="DataAlteracao" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Itens" class="control-label"></label>
-                <input asp-for="Itens" class="form-control" />
-                <span asp-validation-for="Itens" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Checklists" class="control-label"></label>
-                <input asp-for="Checklists" class="form-control" />
-                <span asp-validation-for="Checklists" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+@{ ViewData["Title"] = "Cadastrar Orcamento"; }
+<h1>@ViewData["Title"]</h1>
+<form asp-action="Create" method="post" class="col-md-6">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3"><label asp-for="Validade" class="form-label"></label>
+        <input asp-for="Validade" class="form-control" />
+        <span asp-validation-for="Validade" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="ClienteId" class="form-label"></label>
+        <select asp-for="ClienteId" asp-items="@(ViewData["ClienteId"] as Microsoft.AspNetCore.Mvc.Rendering.SelectList)" class="form-select"><option value="">Selecione</option></select>
+        <span asp-validation-for="ClienteId" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="UsuarioId" class="form-label"></label>
+        <select asp-for="UsuarioId" asp-items="@(ViewData["UsuarioId"] as Microsoft.AspNetCore.Mvc.Rendering.SelectList)" class="form-select"><option value="">Selecione</option></select>
+        <span asp-validation-for="UsuarioId" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="SubTotal" class="form-label"></label>
+        <input asp-for="SubTotal" class="form-control" />
+        <span asp-validation-for="SubTotal" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Desconto" class="form-label"></label>
+        <input asp-for="Desconto" class="form-control" />
+        <span asp-validation-for="Desconto" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Frete" class="form-label"></label>
+        <input asp-for="Frete" class="form-control" />
+        <span asp-validation-for="Frete" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Total" class="form-label"></label>
+        <input asp-for="Total" class="form-control" />
+        <span asp-validation-for="Total" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Obs" class="form-label"></label>
+        <input asp-for="Obs" class="form-control" />
+        <span asp-validation-for="Obs" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Status" class="form-label"></label>
+        <input asp-for="Status" class="form-control" />
+        <span asp-validation-for="Status" class="text-danger"></span></div>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

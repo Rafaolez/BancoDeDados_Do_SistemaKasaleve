@@ -1,44 +1,19 @@
 @model BancoDeDadosKasaleveSistema.Models.Cargo
-
-@{
-    ViewData["Title"] = "Edit";
-}
-
-<h1>Edit</h1>
-
-<h4>Cargo</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="CargoId" />
-            <div class="form-group">
-                <label asp-for="CargoNome" class="control-label"></label>
-                <input asp-for="CargoNome" class="form-control" />
-                <span asp-validation-for="CargoNome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CargoDescricao" class="control-label"></label>
-                <input asp-for="CargoDescricao" class="form-control" />
-                <span asp-validation-for="CargoDescricao" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Ativo" class="control-label"></label>
-                <input asp-for="Ativo" class="form-check-input" />
-                <span asp-validation-for="Ativo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+@{ ViewData["Title"] = "Editar Cargo"; }
+<h1>@ViewData["Title"]</h1>
+<form asp-action="Edit" method="post" class="col-md-6">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input type="hidden" asp-for="CargoId" />
+    <div class="mb-3"><label asp-for="CargoNome" class="form-label"></label>
+        <input asp-for="CargoNome" class="form-control" />
+        <span asp-validation-for="CargoNome" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="CargoDescricao" class="form-label"></label>
+        <input asp-for="CargoDescricao" class="form-control" />
+        <span asp-validation-for="CargoDescricao" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Ativo" class="form-label"></label>
+        <input asp-for="Ativo" class="form-check-input" />
+        <span asp-validation-for="Ativo" class="text-danger"></span></div>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

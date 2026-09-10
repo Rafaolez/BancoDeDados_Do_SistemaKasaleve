@@ -1,132 +1,60 @@
 @model BancoDeDadosKasaleveSistema.Models.Checklist
-
-@{
-    ViewData["Title"] = "Create";
-}
-
-<h1>Create</h1>
-
-<h4>Checklist</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="form-group">
-                <label asp-for="Orcamento" class="control-label"></label>
-                <input asp-for="Orcamento" class="form-control" />
-                <span asp-validation-for="Orcamento" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ChecklistEnderecoEntrega" class="control-label"></label>
-                <input asp-for="ChecklistEnderecoEntrega" class="form-control" />
-                <span asp-validation-for="ChecklistEnderecoEntrega" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Bairro" class="control-label"></label>
-                <input asp-for="Bairro" class="form-control" />
-                <span asp-validation-for="Bairro" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Cidade" class="control-label"></label>
-                <input asp-for="Cidade" class="form-control" />
-                <span asp-validation-for="Cidade" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Cep" class="control-label"></label>
-                <input asp-for="Cep" class="form-control" />
-                <span asp-validation-for="Cep" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ConferirProduto" class="control-label"></label>
-                <input asp-for="ConferirProduto" class="form-check-input" />
-                <span asp-validation-for="ConferirProduto" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Cores" class="control-label"></label>
-                <input asp-for="Cores" class="form-control" />
-                <span asp-validation-for="Cores" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="MesaComFuro" class="control-label"></label>
-                <input asp-for="MesaComFuro" class="form-check-input" />
-                <span asp-validation-for="MesaComFuro" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Alteracao" class="control-label"></label>
-                <input asp-for="Alteracao" class="form-control" />
-                <span asp-validation-for="Alteracao" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Imprimir" class="control-label"></label>
-                <input asp-for="Imprimir" class="form-check-input" />
-                <span asp-validation-for="Imprimir" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Nota" class="control-label"></label>
-                <input asp-for="Nota" class="form-control" />
-                <span asp-validation-for="Nota" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Prazo" class="control-label"></label>
-                <input asp-for="Prazo" class="form-control" />
-                <span asp-validation-for="Prazo" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Frete" class="control-label"></label>
-                <input asp-for="Frete" class="form-control" />
-                <span asp-validation-for="Frete" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="PrevisaoEntrega" class="control-label"></label>
-                <input asp-for="PrevisaoEntrega" class="form-control" />
-                <span asp-validation-for="PrevisaoEntrega" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="UsuarioId" class="control-label"></label>
-                <input asp-for="UsuarioId" class="form-control" />
-                <span asp-validation-for="UsuarioId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Usuario" class="control-label"></label>
-                <input asp-for="Usuario" class="form-control" />
-                <span asp-validation-for="Usuario" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="DataConclusao" class="control-label"></label>
-                <input asp-for="DataConclusao" class="form-control" />
-                <span asp-validation-for="DataConclusao" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+@{ ViewData["Title"] = "Cadastrar Checklist"; }
+<h1>@ViewData["Title"]</h1>
+<form asp-action="Create" method="post" class="col-md-6">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3"><label asp-for="OrcamentoId" class="form-label"></label>
+        <select asp-for="OrcamentoId" asp-items="@(ViewData["OrcamentoId"] as Microsoft.AspNetCore.Mvc.Rendering.SelectList)" class="form-select"><option value="">Selecione</option></select>
+        <span asp-validation-for="OrcamentoId" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="ChecklistEnderecoEntrega" class="form-label"></label>
+        <input asp-for="ChecklistEnderecoEntrega" class="form-control" />
+        <span asp-validation-for="ChecklistEnderecoEntrega" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Bairro" class="form-label"></label>
+        <input asp-for="Bairro" class="form-control" />
+        <span asp-validation-for="Bairro" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Cidade" class="form-label"></label>
+        <input asp-for="Cidade" class="form-control" />
+        <span asp-validation-for="Cidade" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Cep" class="form-label"></label>
+        <input asp-for="Cep" class="form-control" />
+        <span asp-validation-for="Cep" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="ConferirProduto" class="form-label"></label>
+        <input asp-for="ConferirProduto" class="form-check-input" />
+        <span asp-validation-for="ConferirProduto" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Cores" class="form-label"></label>
+        <input asp-for="Cores" class="form-control" />
+        <span asp-validation-for="Cores" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="MesaComFuro" class="form-label"></label>
+        <input asp-for="MesaComFuro" class="form-check-input" />
+        <span asp-validation-for="MesaComFuro" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Alteracao" class="form-label"></label>
+        <input asp-for="Alteracao" class="form-control" />
+        <span asp-validation-for="Alteracao" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Imprimir" class="form-label"></label>
+        <input asp-for="Imprimir" class="form-check-input" />
+        <span asp-validation-for="Imprimir" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Nota" class="form-label"></label>
+        <input asp-for="Nota" class="form-control" />
+        <span asp-validation-for="Nota" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Prazo" class="form-label"></label>
+        <input asp-for="Prazo" class="form-control" />
+        <span asp-validation-for="Prazo" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Frete" class="form-label"></label>
+        <input asp-for="Frete" class="form-control" />
+        <span asp-validation-for="Frete" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="PrevisaoEntrega" class="form-label"></label>
+        <input asp-for="PrevisaoEntrega" class="form-control" />
+        <span asp-validation-for="PrevisaoEntrega" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="UsuarioId" class="form-label"></label>
+        <select asp-for="UsuarioId" asp-items="@(ViewData["UsuarioId"] as Microsoft.AspNetCore.Mvc.Rendering.SelectList)" class="form-select"><option value="">Selecione</option></select>
+        <span asp-validation-for="UsuarioId" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="DataConclusao" class="form-label"></label>
+        <input asp-for="DataConclusao" class="form-control" />
+        <span asp-validation-for="DataConclusao" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Status" class="form-label"></label>
+        <input asp-for="Status" class="form-control" />
+        <span asp-validation-for="Status" class="text-danger"></span></div>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -17,12 +17,8 @@
             @Html.DisplayFor(model => model.UsuarioId)
         </dd>
     </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Usuario)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Usuario)
-        </dd>
+
+
     </dl>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Entidade)
@@ -61,6 +57,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.HistoricoId">Edit</a> |
+
     <a asp-action="Index">Back to List</a>
 </div>

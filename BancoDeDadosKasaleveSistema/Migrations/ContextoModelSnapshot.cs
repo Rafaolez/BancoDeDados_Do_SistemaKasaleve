@@ -179,7 +179,8 @@ namespace BancoDeDadosKasaleveSistema.Migrations
                         .HasColumnName("nota");
 
                     b.Property<int?>("OrcamentoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("OrcamentoId");
 
                     b.Property<DateTime?>("Prazo")
                         .HasColumnType("datetime2")
@@ -322,6 +323,7 @@ namespace BancoDeDadosKasaleveSistema.Migrations
                         .HasColumnName("estoqueMinimo");
 
                     b.Property<string>("Localizacao")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("localizacao");
@@ -336,7 +338,7 @@ namespace BancoDeDadosKasaleveSistema.Migrations
 
                     b.HasKey("EstoqueId");
 
-                    b.HasIndex("ProdutoVariacaoId")
+                    b.HasIndex("ProdutoVariacaoId", "Localizacao")
                         .IsUnique();
 
                     b.ToTable("Estoque");
@@ -430,9 +432,19 @@ namespace BancoDeDadosKasaleveSistema.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("dataMovimentacao");
 
+                    b.Property<string>("DescricaoVariacao")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnName("descricaoVariacao");
+
                     b.Property<int>("EstoqueId")
                         .HasColumnType("int")
                         .HasColumnName("estoqueId");
+
+                    b.Property<string>("LocalizacaoRegistro")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("localizacaoRegistro");
 
                     b.Property<string>("Motivo")
                         .IsRequired()
@@ -465,6 +477,10 @@ namespace BancoDeDadosKasaleveSistema.Migrations
                         .HasColumnType("int")
                         .HasColumnName("tipoMovimentacaoId");
 
+                    b.Property<Guid?>("TransferenciaId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("transferenciaId");
+
                     b.Property<int>("UsuarioId")
                         .HasColumnType("int")
                         .HasColumnName("usuarioId");
@@ -474,6 +490,8 @@ namespace BancoDeDadosKasaleveSistema.Migrations
                     b.HasIndex("OrcamentoId");
 
                     b.HasIndex("TipoMovimentacaoId");
+
+                    b.HasIndex("TransferenciaId");
 
                     b.HasIndex("UsuarioId");
 
@@ -504,10 +522,12 @@ namespace BancoDeDadosKasaleveSistema.Migrations
                         .HasColumnName("dataCriacao");
 
                     b.Property<decimal>("Desconto")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("desconto");
 
                     b.Property<decimal>("Frete")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("frete");
 
@@ -522,10 +542,12 @@ namespace BancoDeDadosKasaleveSistema.Migrations
                         .HasColumnName("status");
 
                     b.Property<decimal>("SubTotal")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("subTotal");
 
                     b.Property<decimal>("Total")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("total");
 
@@ -553,6 +575,7 @@ namespace BancoDeDadosKasaleveSistema.Migrations
                         .HasColumnName("OrcamentoItemId");
 
                     b.Property<decimal>("Desconto")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("desconto");
 
@@ -567,7 +590,8 @@ namespace BancoDeDadosKasaleveSistema.Migrations
                         .HasColumnName("obs");
 
                     b.Property<int?>("OrcamentoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("OrcamentoId");
 
                     b.Property<int>("ProdutoVariacaoId")
                         .HasColumnType("int")
@@ -578,14 +602,17 @@ namespace BancoDeDadosKasaleveSistema.Migrations
                         .HasColumnName("quantidade");
 
                     b.Property<decimal>("ValorExtra")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("valorExtra");
 
                     b.Property<decimal>("ValorTotal")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("valorTotal");
 
                     b.Property<decimal>("ValorUnitario")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("valorUnitario");
 
@@ -644,10 +671,12 @@ namespace BancoDeDadosKasaleveSistema.Migrations
                         .HasColumnName("sku");
 
                     b.Property<decimal>("ValorFinal")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("valorFinal");
 
                     b.Property<decimal>("ValorLogista")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("valorLogista");
 
@@ -828,7 +857,7 @@ namespace BancoDeDadosKasaleveSistema.Migrations
                     b.HasOne("BancoDeDadosKasaleveSistema.Models.Usuario", "Usuario")
                         .WithMany("Checklists")
                         .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Orcamento");
@@ -848,9 +877,9 @@ namespace BancoDeDadosKasaleveSistema.Migrations
             modelBuilder.Entity("BancoDeDadosKasaleveSistema.Models.Estoque", b =>
                 {
                     b.HasOne("BancoDeDadosKasaleveSistema.Models.ProdutoVariacao", "ProdutoVariacao")
-                        .WithOne("Estoque")
-                        .HasForeignKey("BancoDeDadosKasaleveSistema.Models.Estoque", "ProdutoVariacaoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("Estoques")
+                        .HasForeignKey("ProdutoVariacaoId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("ProdutoVariacao");
@@ -1024,7 +1053,7 @@ namespace BancoDeDadosKasaleveSistema.Migrations
 
             modelBuilder.Entity("BancoDeDadosKasaleveSistema.Models.ProdutoVariacao", b =>
                 {
-                    b.Navigation("Estoque");
+                    b.Navigation("Estoques");
 
                     b.Navigation("OrcamentoItens");
                 });

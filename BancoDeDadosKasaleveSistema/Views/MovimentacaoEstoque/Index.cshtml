@@ -1,113 +1,21 @@
 @model IEnumerable<BancoDeDadosKasaleveSistema.Models.MovimentacaoEstoque>
-
-@{
-    ViewData["Title"] = "Index";
+@{ ViewData["Title"] = "Histórico do estoque"; }
+<div class="d-flex justify-content-between align-items-center mb-3"><h1>Histórico do estoque</h1><a asp-action="Create" class="btn btn-primary">Nova movimentação</a></div>
+<form method="get" class="row g-2 mb-4"><input type="hidden" name="transferenciaId" value="@ViewData["TransferenciaId"]" />
+    <div class="col-md-5"><label for="estoqueId" class="form-label">Estoque</label><select id="estoqueId" name="estoqueId" asp-items="@(ViewData["EstoqueId"] as Microsoft.AspNetCore.Mvc.Rendering.SelectList)" class="form-select"><option value="">Todos</option></select></div>
+    <div class="col-md-2"><label for="inicio" class="form-label">De</label><input id="inicio" name="inicio" type="date" value="@ViewData["Inicio"]" class="form-control" /></div>
+    <div class="col-md-2"><label for="fim" class="form-label">Até</label><input id="fim" name="fim" type="date" value="@ViewData["Fim"]" class="form-control" /></div>
+    <div class="col-md-3 align-self-end"><button class="btn btn-outline-primary">Filtrar</button> <a asp-action="Index">Limpar</a></div>
+</form>
+<div class="table-responsive"><table class="table table-striped align-middle">
+<thead><tr><th>Data</th><th>Produto e cores</th><th>Local</th><th>Movimentação</th><th>Quantidade</th><th>Saldo</th><th>Motivo</th><th>Responsável</th><th></th></tr></thead>
+<tbody>
+@foreach (var item in Model)
+{
+    <tr><td>@item.DataMovimentacao.ToString("dd/MM/yyyy HH:mm")</td><td>@(item.DescricaoVariacao ?? item.Estoque?.ProdutoVariacao?.Sku)</td><td>@(item.LocalizacaoRegistro ?? item.Estoque?.Localizacao)</td>
+    <td><span class="badge @(item.SaldoPosterior >= item.SaldoAnterior ? "bg-success" : "bg-danger")">@(item.SaldoPosterior >= item.SaldoAnterior ? "Entrada" : "Saída")</span> @item.TipoMovimentacao?.Nome</td>
+    <td>@item.Quantidade</td><td>@item.SaldoAnterior → @item.SaldoPosterior</td><td>@item.Motivo @if(item.TransferenciaId.HasValue) { <a asp-action="Index" asp-route-transferenciaId="@item.TransferenciaId">Ver transferência</a> }</td><td>@item.Usuario?.Nome</td>
+    <td><a asp-action="Details" asp-route-id="@item.MovimentacaoEstoqueId">Detalhes</a></td></tr>
 }
-
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.EstoqueId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Estoque)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TipoMovimentacaoId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TipoMovimentacao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quantidade)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SaldoAnterior)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SaldoPosterior)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Motivo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OrcamentoId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Orcamento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataMovimentacao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Obs)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UsuarioId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Usuario)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.EstoqueId)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Estoque)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.TipoMovimentacaoId)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.TipoMovimentacao)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Quantidade)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.SaldoAnterior)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.SaldoPosterior)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Motivo)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.OrcamentoId)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Orcamento)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.DataMovimentacao)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Obs)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.UsuarioId)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Usuario)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.MovimentacaoEstoqueId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MovimentacaoEstoqueId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MovimentacaoEstoqueId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+@if (!Model.Any()) { <tr><td colspan="9">Nenhuma movimentação encontrada.</td></tr> }
+</tbody></table></div>

@@ -42,7 +42,17 @@ namespace BancoDeDadosKasaleveSistema.Models
 
         [Column("ativo")] public bool Ativo { get; set; } = true;
 
-        public Estoque? Estoque { get; set; }
+        public ICollection<Estoque> Estoques { get; set; } = new List<Estoque>();
+
+        [NotMapped]
+        public string DescricaoCompleta => string.Join(" | ", new[]
+        {
+            Produto?.Nome, Sku,
+            AluminioCor == null ? null : "Alumínio: " + AluminioCor.CorAluminioCor,
+            CordaCor == null ? null : "Corda: " + CordaCor.Nome,
+            FibraCor == null ? null : "Fibra: " + FibraCor.Nome,
+            Tecido == null ? null : "Tecido: " + Tecido.Nome
+        }.Where(s => !string.IsNullOrWhiteSpace(s)));
         public ICollection<OrcamentoItem>? OrcamentoItens { get; set; }
     }
 }

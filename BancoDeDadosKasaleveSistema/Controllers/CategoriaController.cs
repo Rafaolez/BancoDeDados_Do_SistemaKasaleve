@@ -1,149 +1,123 @@
-
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BancoDeDadosKasaleveSistema.Models;
+
+namespace BancoDeDadosKasaleveSistema.Controllers;
 
 public class CategoriaController : Controller
 {
     private readonly Contexto _context;
+    public CategoriaController(Contexto context) => _context = context;
 
-    public CategoriaController(Contexto context)
+    public async Task<IActionResult> Index() => View(await _context.Categoria.AsNoTracking().ToListAsync());
+
+    public async Task<IActionResult> Details(int? id)
     {
-        _context = context;
+        if (id == null) return NotFound();
+        var model = await _context.Categoria.AsNoTracking().FirstOrDefaultAsync(x => x.CategoriaId == id);
+        return model == null ? NotFound() : View(model);
     }
 
-    // GET: CATEGORIAS
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Create()
     {
-        return View(await _context.Categoria.ToListAsync());
+        var model = new Categoria();
+        await LoadOptionsAsync(model);
+        return View(model);
     }
 
-    // GET: CATEGORIAS/Details/5
-    public async Task<IActionResult> Details(int? categoriaid)
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("CategoriaNome,CategoriaDescricao,Ativo")] Categoria model)
     {
-        if (categoriaid == null)
-        {
-            return NotFound();
-        }
-
-        var categoria = await _context.Categoria
-            .FirstOrDefaultAsync(m => m.CategoriaId == categoriaid);
-        if (categoria == null)
-        {
-            return NotFound();
-        }
-
-        return View(categoria);
-    }
-
-    // GET: CATEGORIAS/Create
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    // POST: CATEGORIAS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("CategoriaId,CategoriaNome,CategoriaDescricao,Ativo")] Categoria categoria)
-    {
+        await ValidateReferencesAsync(model);
         if (ModelState.IsValid)
         {
-            _context.Add(categoria);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-        return View(categoria);
-    }
-
-    // GET: CATEGORIAS/Edit/5
-    public async Task<IActionResult> Edit(int? categoriaid)
-    {
-        if (categoriaid == null)
-        {
-            return NotFound();
-        }
-
-        var categoria = await _context.Categoria.FindAsync(categoriaid);
-        if (categoria == null)
-        {
-            return NotFound();
-        }
-        return View(categoria);
-    }
-
-    // POST: CATEGORIAS/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? categoriaid, [Bind("CategoriaId,CategoriaNome,CategoriaDescricao,Ativo")] Categoria categoria)
-    {
-        if (categoriaid != categoria.CategoriaId)
-        {
-            return NotFound();
-        }
-
-        if (ModelState.IsValid)
-        {
+            _context.Add(model);
             try
             {
-                _context.Update(categoria);
                 await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Não foi possível salvar. Confira os dados e os registros relacionados.");
+            }
+        }
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null) return NotFound();
+        var model = await _context.Categoria.FindAsync(id);
+        if (model == null) return NotFound();
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, [Bind("CategoriaId,CategoriaNome,CategoriaDescricao,Ativo")] Categoria model)
+    {
+        if (id != model.CategoriaId) return NotFound();
+        var saved = await _context.Categoria.FindAsync(id);
+        if (saved == null) return NotFound();
+        await ValidateReferencesAsync(model);
+        if (ModelState.IsValid)
+        {
+            saved.CategoriaNome = model.CategoriaNome;
+            saved.CategoriaDescricao = model.CategoriaDescricao;
+            saved.Ativo = model.Ativo;
+            try
+            {
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CategoriaExists(categoria.CategoriaId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                ModelState.AddModelError("", "O registro foi alterado ou excluído. Recarregue e tente novamente.");
             }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Não foi possível salvar. Confira os dados e os registros relacionados.");
+            }
+        }
+        await LoadOptionsAsync(model);
+        return View(model);
+    }
+
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null) return NotFound();
+        var model = await _context.Categoria.AsNoTracking().FirstOrDefaultAsync(x => x.CategoriaId == id);
+        return model == null ? NotFound() : View(model);
+    }
+
+    [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var model = await _context.Categoria.FindAsync(id);
+        if (model == null) return NotFound();
+        _context.Categoria.Remove(model);
+        try
+        {
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        return View(categoria);
+        catch (DbUpdateException)
+        {
+            ModelState.AddModelError("", "Este registro possui vínculos e não pode ser excluído.");
+            return View("Delete", model);
+        }
     }
 
-    // GET: CATEGORIAS/Delete/5
-    public async Task<IActionResult> Delete(int? categoriaid)
+    private async Task LoadOptionsAsync(Categoria model)
     {
-        if (categoriaid == null)
-        {
-            return NotFound();
-        }
-
-        var categoria = await _context.Categoria
-            .FirstOrDefaultAsync(m => m.CategoriaId == categoriaid);
-        if (categoria == null)
-        {
-            return NotFound();
-        }
-
-        return View(categoria);
+        await Task.CompletedTask;
     }
 
-    // POST: CATEGORIAS/Delete/5
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? categoriaid)
+    private async Task ValidateReferencesAsync(Categoria model)
     {
-        var categoria = await _context.Categoria.FindAsync(categoriaid);
-        if (categoria != null)
-        {
-            _context.Categoria.Remove(categoria);
-        }
-
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
-
-    private bool CategoriaExists(int? categoriaid)
-    {
-        return _context.Categoria.Any(e => e.CategoriaId == categoriaid);
+        await Task.CompletedTask;
     }
 }

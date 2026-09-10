@@ -34,7 +34,7 @@
             @Html.DisplayFor(model => model.Ativo)
         </dd>
     </dl>
-    <form asp-action="Delete">
+    <form asp-action="Delete" asp-route-id="@Model.CategoriaId"><div asp-validation-summary="All" class="text-danger"></div>
         <input type="hidden" asp-for="CategoriaId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>

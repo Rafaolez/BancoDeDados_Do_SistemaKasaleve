@@ -91,22 +91,14 @@
         </dd>
     </dl>
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Usuario)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Usuario)
-        </dd>
+
+
     </dl>
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Orcamentos)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Orcamentos)
-        </dd>
+
+
     </dl>
-    <form asp-action="Delete">
+    <form asp-action="Delete" asp-route-id="@Model.ClienteId"><div asp-validation-summary="All" class="text-danger"></div>
         <input type="hidden" asp-for="ClienteId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>

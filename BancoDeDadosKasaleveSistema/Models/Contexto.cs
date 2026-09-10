@@ -31,6 +31,28 @@ namespace BancoDeDadosKasaleveSistema.Models
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Estoque>()
+                .HasOne(e => e.ProdutoVariacao).WithMany(v => v.Estoques)
+                .HasForeignKey(e => e.ProdutoVariacaoId).OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Estoque>()
+                .HasIndex(e => new { e.ProdutoVariacaoId, e.Localizacao }).IsUnique();
+            modelBuilder.Entity<MovimentacaoEstoque>().HasIndex(m => m.TransferenciaId);
+
+            modelBuilder.Entity<Checklist>()
+                .HasOne(c => c.Usuario)
+                .WithMany(u => u.Checklists)
+                .HasForeignKey(c => c.UsuarioId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            foreach (var entity in modelBuilder.Model.GetEntityTypes())
+            {
+                foreach (var property in entity.GetProperties().Where(p => p.ClrType == typeof(decimal)))
+                {
+                    property.SetPrecision(18);
+                    property.SetScale(2);
+                }
+            }
+
             modelBuilder.Entity<MovimentacaoEstoque>()
                 .HasIndex(m => new { m.EstoqueId, m.DataMovimentacao });
 

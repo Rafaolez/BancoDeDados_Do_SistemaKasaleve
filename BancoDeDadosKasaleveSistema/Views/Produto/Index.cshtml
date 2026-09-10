@@ -15,9 +15,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.CategoriaId)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Categoria)
-            </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.Nome)
             </th>
@@ -45,9 +43,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Ativo)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Variacoes)
-            </th>
+
             <th></th>
         </tr>
     </thead>
@@ -57,9 +53,7 @@
             <td>
                 @Html.DisplayFor(model => item.CategoriaId)
             </td>
-            <td>
-                @Html.DisplayFor(model => item.Categoria)
-            </td>
+
             <td>
                 @Html.DisplayFor(model => item.Nome)
             </td>
@@ -87,9 +81,7 @@
             <td>
                 @Html.DisplayFor(model => item.Ativo)
             </td>
-            <td>
-                @Html.DisplayFor(model => item.Variacoes)
-            </td>
+
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ProdutoId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ProdutoId">Details</a> |

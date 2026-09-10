@@ -1,66 +1,19 @@
 @model BancoDeDadosKasaleveSistema.Models.Estoque
-
-@{
-    ViewData["Title"] = "Create";
-}
-
-<h1>Create</h1>
-
-<h4>Estoque</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="form-group">
-                <label asp-for="ProdutoVariacaoId" class="control-label"></label>
-                <input asp-for="ProdutoVariacaoId" class="form-control" />
-                <span asp-validation-for="ProdutoVariacaoId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ProdutoVariacao" class="control-label"></label>
-                <input asp-for="ProdutoVariacao" class="form-control" />
-                <span asp-validation-for="ProdutoVariacao" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Localizacao" class="control-label"></label>
-                <input asp-for="Localizacao" class="form-control" />
-                <span asp-validation-for="Localizacao" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Quantidade" class="control-label"></label>
-                <input asp-for="Quantidade" class="form-control" />
-                <span asp-validation-for="Quantidade" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="DataModificacao" class="control-label"></label>
-                <input asp-for="DataModificacao" class="form-control" />
-                <span asp-validation-for="DataModificacao" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="EstoqueMinimo" class="control-label"></label>
-                <input asp-for="EstoqueMinimo" class="form-control" />
-                <span asp-validation-for="EstoqueMinimo" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Movimentacoes" class="control-label"></label>
-                <input asp-for="Movimentacoes" class="form-control" />
-                <span asp-validation-for="Movimentacoes" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+@{ ViewData["Title"] = "Cadastrar Estoque"; }
+<h1>@ViewData["Title"]</h1>
+<p>O saldo é atualizado somente por movimentações. Cadastre o estoque com saldo zero e registre uma entrada para informar o saldo inicial.</p>
+<form asp-action="Create" method="post" class="col-md-6">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3"><label asp-for="ProdutoVariacaoId" class="form-label"></label>
+        <select asp-for="ProdutoVariacaoId" asp-items="@(ViewData["ProdutoVariacaoId"] as Microsoft.AspNetCore.Mvc.Rendering.SelectList)" class="form-select"><option value="">Selecione</option></select>
+        <span asp-validation-for="ProdutoVariacaoId" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Localizacao" class="form-label"></label>
+        <input asp-for="Localizacao" class="form-control" />
+        <span asp-validation-for="Localizacao" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="EstoqueMinimo" class="form-label"></label>
+        <input asp-for="EstoqueMinimo" class="form-control" />
+        <span asp-validation-for="EstoqueMinimo" class="text-danger"></span></div>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

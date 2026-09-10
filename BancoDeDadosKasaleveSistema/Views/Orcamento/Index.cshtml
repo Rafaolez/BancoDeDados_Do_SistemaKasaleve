@@ -21,15 +21,11 @@
             <th>
                 @Html.DisplayNameFor(model => model.ClienteId)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cliente)
-            </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.UsuarioId)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Usuario)
-            </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.SubTotal)
             </th>
@@ -51,12 +47,8 @@
             <th>
                 @Html.DisplayNameFor(model => model.DataAlteracao)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Itens)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Checklists)
-            </th>
+
+
             <th></th>
         </tr>
     </thead>
@@ -72,15 +64,11 @@
             <td>
                 @Html.DisplayFor(model => item.ClienteId)
             </td>
-            <td>
-                @Html.DisplayFor(model => item.Cliente)
-            </td>
+
             <td>
                 @Html.DisplayFor(model => item.UsuarioId)
             </td>
-            <td>
-                @Html.DisplayFor(model => item.Usuario)
-            </td>
+
             <td>
                 @Html.DisplayFor(model => item.SubTotal)
             </td>
@@ -102,12 +90,8 @@
             <td>
                 @Html.DisplayFor(model => item.DataAlteracao)
             </td>
-            <td>
-                @Html.DisplayFor(model => item.Itens)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Checklists)
-            </td>
+
+
             <td>
                 <a asp-action="Edit" asp-route-id="@item.OrcamentoId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.OrcamentoId">Details</a> |

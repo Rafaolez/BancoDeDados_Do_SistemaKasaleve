@@ -12,15 +12,11 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Orcamento)
-            </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.ProdutoVariacaoId)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProdutoVariacao)
-            </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.Quantidade)
             </th>
@@ -48,15 +44,11 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(model => item.Orcamento)
-            </td>
+
             <td>
                 @Html.DisplayFor(model => item.ProdutoVariacaoId)
             </td>
-            <td>
-                @Html.DisplayFor(model => item.ProdutoVariacao)
-            </td>
+
             <td>
                 @Html.DisplayFor(model => item.Quantidade)
             </td>

@@ -1,84 +1,36 @@
 @model BancoDeDadosKasaleveSistema.Models.OrcamentoItem
-
-@{
-    ViewData["Title"] = "Create";
-}
-
-<h1>Create</h1>
-
-<h4>OrcamentoItem</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="form-group">
-                <label asp-for="Orcamento" class="control-label"></label>
-                <input asp-for="Orcamento" class="form-control" />
-                <span asp-validation-for="Orcamento" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ProdutoVariacaoId" class="control-label"></label>
-                <input asp-for="ProdutoVariacaoId" class="form-control" />
-                <span asp-validation-for="ProdutoVariacaoId" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ProdutoVariacao" class="control-label"></label>
-                <input asp-for="ProdutoVariacao" class="form-control" />
-                <span asp-validation-for="ProdutoVariacao" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Quantidade" class="control-label"></label>
-                <input asp-for="Quantidade" class="form-control" />
-                <span asp-validation-for="Quantidade" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ValorUnitario" class="control-label"></label>
-                <input asp-for="ValorUnitario" class="form-control" />
-                <span asp-validation-for="ValorUnitario" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ValorExtra" class="control-label"></label>
-                <input asp-for="ValorExtra" class="form-control" />
-                <span asp-validation-for="ValorExtra" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Desconto" class="control-label"></label>
-                <input asp-for="Desconto" class="form-control" />
-                <span asp-validation-for="Desconto" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ValorTotal" class="control-label"></label>
-                <input asp-for="ValorTotal" class="form-control" />
-                <span asp-validation-for="ValorTotal" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Obs" class="control-label"></label>
-                <input asp-for="Obs" class="form-control" />
-                <span asp-validation-for="Obs" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="NomeProdutoSnapshot" class="control-label"></label>
-                <input asp-for="NomeProdutoSnapshot" class="form-control" />
-                <span asp-validation-for="NomeProdutoSnapshot" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+@{ ViewData["Title"] = "Cadastrar OrcamentoItem"; }
+<h1>@ViewData["Title"]</h1>
+<form asp-action="Create" method="post" class="col-md-6">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3"><label asp-for="OrcamentoId" class="form-label"></label>
+        <select asp-for="OrcamentoId" asp-items="@(ViewData["OrcamentoId"] as Microsoft.AspNetCore.Mvc.Rendering.SelectList)" class="form-select"><option value="">Selecione</option></select>
+        <span asp-validation-for="OrcamentoId" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="ProdutoVariacaoId" class="form-label"></label>
+        <select asp-for="ProdutoVariacaoId" asp-items="@(ViewData["ProdutoVariacaoId"] as Microsoft.AspNetCore.Mvc.Rendering.SelectList)" class="form-select"><option value="">Selecione</option></select>
+        <span asp-validation-for="ProdutoVariacaoId" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Quantidade" class="form-label"></label>
+        <input asp-for="Quantidade" class="form-control" />
+        <span asp-validation-for="Quantidade" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="ValorUnitario" class="form-label"></label>
+        <input asp-for="ValorUnitario" class="form-control" />
+        <span asp-validation-for="ValorUnitario" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="ValorExtra" class="form-label"></label>
+        <input asp-for="ValorExtra" class="form-control" />
+        <span asp-validation-for="ValorExtra" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Desconto" class="form-label"></label>
+        <input asp-for="Desconto" class="form-control" />
+        <span asp-validation-for="Desconto" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="ValorTotal" class="form-label"></label>
+        <input asp-for="ValorTotal" class="form-control" />
+        <span asp-validation-for="ValorTotal" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Obs" class="form-label"></label>
+        <input asp-for="Obs" class="form-control" />
+        <span asp-validation-for="Obs" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="NomeProdutoSnapshot" class="form-label"></label>
+        <input asp-for="NomeProdutoSnapshot" class="form-control" />
+        <span asp-validation-for="NomeProdutoSnapshot" class="text-danger"></span></div>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

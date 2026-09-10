@@ -11,18 +11,14 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProdutoVariacaoId)
+            Produto e cores
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProdutoVariacaoId)
+            @Model.ProdutoVariacao?.DescricaoCompleta
         </dd>
     </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProdutoVariacao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProdutoVariacao)
-        </dd>
+
+
     </dl>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Localizacao)
@@ -52,12 +48,8 @@
             @Html.DisplayFor(model => model.EstoqueMinimo)
         </dd>
     </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Movimentacoes)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Movimentacoes)
-        </dd>
+
+
     </dl>
 </div>
 <div>
